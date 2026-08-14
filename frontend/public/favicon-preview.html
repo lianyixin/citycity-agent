@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Favicon 对比预览</title>
+  <style>
+    :root {
+      --bg: #f7f6f4;
+      --ink: #1d1b1a;
+      --brand: #ff2e4d;
+      --line: #ece8e3;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 32px 24px 48px;
+      font-family: PingFang SC, Hiragino Sans GB, Microsoft YaHei, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    h1 { margin: 0 0 8px; font-size: 24px; }
+    p.lead { margin: 0 0 28px; color: #6c6661; line-height: 1.6; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      max-width: 980px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 4px 14px rgba(29,27,26,.06);
+    }
+    .card.recommended {
+      border-color: #ffb3c0;
+      box-shadow: 0 8px 24px rgba(255,46,77,.12);
+    }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--brand);
+      background: #ffe5e9;
+      padding: 3px 8px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .card h2 { margin: 0 0 6px; font-size: 16px; }
+    .card .desc { margin: 0 0 16px; font-size: 13px; color: #6c6661; line-height: 1.5; }
+    .sizes { display: flex; align-items: end; gap: 18px; margin-bottom: 16px; }
+    .size-item { text-align: center; }
+    .size-item img, .size-item .logo-crop {
+      display: block;
+      image-rendering: auto;
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    }
+    .size-item span { display: block; margin-top: 6px; font-size: 11px; color: #9b948e; }
+    .tab-mock {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #ece8e3;
+      border-radius: 10px 10px 0 0;
+      padding: 8px 12px;
+      max-width: 220px;
+    }
+    .tab-mock img, .tab-mock .logo-crop {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .tab-mock .title {
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .logo-crop {
+      object-fit: cover;
+      object-position: center 18%;
+      background: #5eb3e4;
+    }
+  </style>
+</head>
+<body>
+  <h1>Favicon 方案对比</h1>
+  <p class="lead">当前项目未配置 favicon，浏览器标签页显示默认图标。以下是基于品牌色 <strong>#ff2e4d</strong> 和「上海 City Walk」主题设计的 4 个方案，模拟 16 / 32 / 64 px 及标签页效果。</p>
+
+  <div class="grid">
+    <div class="card recommended">
+      <div class="badge">推荐</div>
+      <h2>A · 红色「上」字</h2>
+      <p class="desc">小红书红底 + 白色「上」，16px 仍清晰可辨，和上海 City 主题直接关联。</p>
+      <div class="sizes">
+        <div class="size-item"><img src="/favicon-shang.svg" width="16" height="16" alt=""><span>16px</span></div>
+        <div class="size-item"><img src="/favicon-shang.svg" width="32" height="32" alt=""><span>32px</span></div>
+        <div class="size-item"><img src="/favicon-shang.svg" width="64" height="64" alt=""><span>64px</span></div>
+      </div>
+      <div class="tab-mock"><img src="/favicon-shang.svg" alt=""><span class="title">上海City不City</span></div>
+    </div>
+
+    <div class="card">
+      <h2>B · 红色定位针</h2>
+      <p class="desc">强调「玩法发现 / 地点探索」，语义直观，但和其他地图类 App 较相似。</p>
+      <div class="sizes">
+        <div class="size-item"><img src="/favicon-pin.svg" width="16" height="16" alt=""><span>16px</span></div>
+        <div class="size-item"><img src="/favicon-pin.svg" width="32" height="32" alt=""><span>32px</span></div>
+        <div class="size-item"><img src="/favicon-pin.svg" width="64" height="64" alt=""><span>64px</span></div>
+      </div>
+      <div class="tab-mock"><img src="/favicon-pin.svg" alt=""><span class="title">上海City不City</span></div>
+    </div>
+
+    <div class="card">
+      <h2>C · 武康大楼剪影</h2>
+      <p class="desc">和顶部 brand-logo 视觉一致，但 16px 细节偏多，小尺寸略糊。</p>
+      <div class="sizes">
+        <div class="size-item"><img src="/favicon-building.svg" width="16" height="16" alt=""><span>16px</span></div>
+        <div class="size-item"><img src="/favicon-building.svg" width="32" height="32" alt=""><span>32px</span></div>
+        <div class="size-item"><img src="/favicon-building.svg" width="64" height="64" alt=""><span>64px</span></div>
+      </div>
+      <div class="tab-mock"><img src="/favicon-building.svg" alt=""><span class="title">上海City不City</span></div>
+    </div>
+
+    <div class="card">
+      <h2>D · 直接裁 brand-logo</h2>
+      <p class="desc">沿用现有顶部 logo 图，竖版海报缩到 16px 几乎看不清文字和建筑。</p>
+      <div class="sizes">
+        <div class="size-item"><img src="/brand-logo.png" class="logo-crop" width="16" height="16" alt=""><span>16px</span></div>
+        <div class="size-item"><img src="/brand-logo.png" class="logo-crop" width="32" height="32" alt=""><span>32px</span></div>
+        <div class="size-item"><img src="/brand-logo.png" class="logo-crop" width="64" height="64" alt=""><span>64px</span></div>
+      </div>
+      <div class="tab-mock"><img src="/brand-logo.png" class="logo-crop" alt=""><span class="title">上海City不City</span></div>
+    </div>
+  </div>
+</body>
+</html>

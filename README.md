@@ -1,0 +1,356 @@
+<p align="center">
+  <img src="frontend/public/brand-logo.png" width="112" alt="CityCity Logo" />
+</p>
+
+<h1 align="center">CityCity</h1>
+
+<p align="center"><strong>Parallel multi-route AI agents for discovering what to do in a city.</strong></p>
+
+<p align="center">
+  <a href="README_CN.md">中文文档</a> ·
+  <a href="https://shanghaicitycity-web.havenai.online/">Live Demo</a> ·
+  <a href="https://github.com/lianyixin/citycity">GitHub</a>
+</p>
+
+CityCity turns an open-ended request such as “What can I do around Shanghai Changning tonight?” into several grounded city-play routes. Instead of committing to one plan too early, a Planner Agent creates diverse branches and bounded parallel Execute Agents search, evaluate, and expand those branches against real POI data.
+
+## Background
+
+Maps are good at answering “Where is this place?” and travel feeds are good at showing “Where did other people go?” Neither fully answers situational questions such as “What can two friends do around Shanghai Changning after work?” or “Plan a relaxed, photo-friendly Saturday afternoon.”
+
+CityCity is an agent experiment for **city activity planning**. It extracts location, time, companions, budget, and preferences from natural language; proposes multiple activity directions; validates them against map POIs in parallel; and composes several routes that the user can choose from. The live product is Shanghai-focused, while the workflow is designed to extend to other cities and map providers.
+
+## Try these queries
+
+Results are usually better when a query includes where, when, who, and what kind of experience you want:
+
+```text
+What can two people do around Shanghai Changning tonight?
+
+Starting from Jing'an Temple on Saturday afternoon, plan a relaxed walk with coffee and photo stops.
+
+I have three hours after work near Xujiahui and a ¥200 budget. I want dinner and a night view.
+
+What can I do with children in Pudong on a rainy day? Prefer indoor places that are close together.
+
+Plan a quiet first date around Xintiandi with good photo spots.
+
+I am staying near the Bund. Plan a morning city walk followed by a local Shanghai lunch.
+
+How should I spend half a day around West Lake in Hangzhou without only visiting the busiest attractions?
+```
+
+> **Keep the trip within one day for now.** CityCity is currently best suited to a few hours, a half day, or a single day of city walks, dates, family activities, food trips, photography, and nightlife. Multi-day, multi-city, hotel, and long-distance transport planning are not yet optimized.
+
+For cities supported by Amap, change the default city, coordinates, and API key. For regions outside Amap coverage, implement a Google Maps, Mapbox, or other map-provider adapter while reusing the Planner/Execute orchestration.
+
+## Live demo
+
+**[Try Shanghai CityCity →](https://shanghaicitycity-web.havenai.online/)**
+
+<video src="https://github.com/lianyixin/citycity/releases/download/product-demo/product-demo.mp4" controls width="100%" poster="docs/assets/demo-video-placeholder.svg">
+  Your browser does not support the video tag.
+  <a href="https://github.com/lianyixin/citycity/releases/download/product-demo/product-demo.mp4">Download the product demo video</a>.
+</video>
+
+> Product walkthrough above (video hosted via [GitHub Release](https://github.com/lianyixin/citycity/releases/tag/product-demo), not in git). Local copy: `docs/assets/fetch-media.sh`. You can also try the [live website](https://shanghaicitycity-web.havenai.online/).
+
+## What's included
+
+- A runnable React/Vite discovery feed and AI planning interface
+- FastAPI generation, progress logs, search, interactions, and ZIP export
+- Planner Agent, Execute Agent, and multi-round route exploration
+- Bounded parallel route execution built with `asyncio`
+- Amap POI search, geocoding, and persistent response caching
+- DeepSeek-powered planning, POI selection, and content composition
+- SQLite local development and PostgreSQL production support
+- Optional Logto auth, Umami analytics, Alipay subscriptions, and Jimeng image polishing
+- Docker deployment, sanitized seed content, bilingual documentation, and backend tests
+
+## Why CityCity
+
+- **Parallel route exploration** — multiple itinerary branches run concurrently instead of one serial chain.
+- **Planner / Execute separation** — the LLM plans intent; tool-backed execution grounds each step in real POIs.
+- **Recursive route expansion** — successful branches can receive a next-step plan for multi-stop routes.
+- **Bounded concurrency** — `asyncio.Semaphore` and `asyncio.gather` control parallelism and API pressure.
+- **Partial-failure isolation** — one failed branch does not discard successful routes; all-branch failures still surface.
+- **Structured output** — routes, steps, POIs, generation logs, and final social cards remain queryable.
+- **Provider boundary** — map access is isolated behind `AmapTool`, making another provider adapter practical.
+- **Full-stack reference** — React/Vite frontend, FastAPI backend, SQLAlchemy persistence, auth, analytics, payment, and optional image polishing.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    U[User request] --> W[React + Vite]
+    W --> API[FastAPI API]
+    API --> G[Generation Service]
+    G --> P[Planner Agent]
+    P --> B[Route branch queue]
+
+    B --> E1[Execute branch 1]
+    B --> E2[Execute branch 2]
+    B --> E3[Execute branch N]
+
+    subgraph Parallel route execution
+      E1
+      E2
+      E3
+    end
+
+    E1 --> M[Map / POI adapter]
+    E2 --> M
+    E3 --> M
+    E1 --> L[LLM POI selector]
+    E2 --> L
+    E3 --> L
+
+    M --> C[(POI cache)]
+    E1 --> R[Recursive planner]
+    E2 --> R
+    E3 --> R
+    R --> B
+
+    E1 --> A[Route aggregator]
+    E2 --> A
+    E3 --> A
+    A --> X[Content composer]
+    X --> DB[(SQLite / PostgreSQL)]
+    DB --> API
+```
+
+### Parallel agent workflow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Planner
+    participant Orchestrator
+    participant ExecuteAgents
+    participant Map
+    participant LLM
+
+    User->>Planner: query + location + time + preferences
+    Planner-->>Orchestrator: 3–N diverse route plans
+    Orchestrator->>ExecuteAgents: dispatch branches (bounded parallelism)
+    par Route A
+      ExecuteAgents->>Map: search POIs
+      ExecuteAgents->>LLM: rank candidates
+    and Route B
+      ExecuteAgents->>Map: search POIs
+      ExecuteAgents->>LLM: rank candidates
+    and Route N
+      ExecuteAgents->>Map: search POIs
+      ExecuteAgents->>LLM: rank candidates
+    end
+    ExecuteAgents-->>Planner: completed paths
+    Planner-->>Orchestrator: optional next-hop plans
+    Orchestrator-->>User: ranked multi-route note
+```
+
+The implementation uses `MAX_PARALLEL_ROUTES` (default `4`) to cap active route branches. `asyncio.gather(..., return_exceptions=True)` preserves successful branches when one branch fails, while propagating an error when every branch fails.
+
+## Tech stack
+
+- **Frontend:** React, TypeScript, Vite
+- **Backend:** Python, FastAPI, Pydantic
+- **Agent orchestration:** async Planner Agent + bounded parallel Execute Agents
+- **LLM:** DeepSeek (replaceable through the client boundary)
+- **Maps:** Amap Web Service API with persistent response cache
+- **Database:** SQLite for local development; PostgreSQL for production
+- **Optional integrations:** Logto, Umami, Alipay, Volcengine Jimeng
+- **Deployment:** Docker; the live demo is hosted with [Haven AI](https://havenai.cn/) and [EasyLaunch](https://easylaunch.aimos.cloud/)
+
+## Quick start
+
+### Requirements
+
+- Python 3.11+
+- Node.js 20+
+- An Amap Web Service API key
+- A DeepSeek API key
+
+### 1. Configure
+
+```bash
+git clone https://github.com/lianyixin/citycity.git
+cd citycity
+cp .env.example .env.development
+```
+
+Edit `.env.development` and set at least:
+
+```dotenv
+AMAP_API_KEY=your_server_side_amap_key
+DEEPSEEK_API_KEY=your_deepseek_key
+```
+
+Never commit `.env.development`, `.env.production`, private keys, database URLs, or provider tokens. `.gitignore` already excludes them.
+
+### 2. Start the backend
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r backend/requirements.txt
+PYTHONPATH=backend uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port 8001 --reload
+```
+
+SQLite is used automatically when `DATABASE_URL` is empty.
+
+### 3. Start the frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open <http://localhost:5173>. Vite proxies `/api` to <http://localhost:8001>.
+
+### 4. Optional seed content
+
+```bash
+PYTHONPATH=backend python scripts/import_seed.py
+```
+
+## Run in another city
+
+For cities supported by Amap:
+
+```dotenv
+DEFAULT_CITY=杭州
+DEFAULT_CITY_LAT=30.2741
+DEFAULT_CITY_LNG=120.1551
+AMAP_API_KEY=your_amap_key
+```
+
+The request itself may also contain a target area and coordinates; those take precedence over defaults.
+
+### International cities
+
+An overseas deployment requires more than changing a key because map providers use different request and response schemas. Implement a provider adapter exposing the same capabilities as `AmapTool`:
+
+```python
+async def search_pois(query, location, city, radius, limit): ...
+async def suggest_locations(query, location, city, limit): ...
+```
+
+Then wire it into `PlayDiscoveryWorkflow`. A Google Maps adapter would use a Google Maps API key while keeping the Planner/Execute parallel orchestration unchanged.
+
+## Configuration
+
+The safe template is documented in [`.env.example`](.env.example).
+
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `AMAP_API_KEY` | Yes | Server-side Amap Web Service access |
+| `DEEPSEEK_API_KEY` | Yes | Planning, selection, and content generation |
+| `DEFAULT_CITY` | No | Fallback city; defaults to Shanghai |
+| `DEFAULT_CITY_LAT/LNG` | No | Fallback center coordinates |
+| `MAX_PARALLEL_ROUTES` | No | Maximum concurrent route branches |
+| `DATABASE_URL` | No | PostgreSQL DSN; empty uses SQLite |
+| `EXTRA_IMAGE_HOSTS` | No | Extra comma-separated public CDN hosts allowed for ZIP export |
+| `LOGTO_*`, `VITE_LOGTO_*` | No | Authentication |
+| `VITE_UMAMI_*` | No | Analytics (public browser configuration) |
+| `ALIPAY_*` | No | Subscription payment |
+| `JIMENG_*` | No | Optional image polishing |
+
+Variables prefixed with `VITE_` are embedded in the browser bundle and must never contain secrets.
+
+## API and data flow
+
+- `POST /api/generate` starts a generation request.
+- The Planner Agent creates diverse root plans from intent and context.
+- Execute Agent branches concurrently search POIs and use an LLM to select grounded candidates.
+- Completed paths can be recursively expanded.
+- Candidate routes are filtered, deduplicated, and composed into one multi-route note.
+- SQLAlchemy persists requests, logs, methods, POIs, posts, and interactions.
+- A map-response cache reduces duplicate API traffic.
+
+The open-source distribution intentionally contains **no automated daily publishing scheduler**. Content is generated only from explicit API or user requests.
+
+## Tests
+
+```bash
+PYTHONPATH=backend python -m pytest backend/tests -v
+cd frontend && npm run build
+```
+
+## Production and Docker
+
+Build the frontend first, then build the image:
+
+```bash
+cd frontend && npm ci && npm run build && cd ..
+docker build -t citycity .
+docker run --rm -p 8001:8000 --env-file .env.production citycity
+```
+
+Keep `.env.production` outside Git and inject it through your deployment platform.
+
+## Security
+
+- This repository does not contain production credentials or deployment bindings.
+- Secrets stay server-side and are loaded from environment variables.
+- The copied open-source history starts clean; it does not include the private source repository history.
+- If a credential has ever been committed elsewhere, removing it from the latest tree is insufficient—rotate it.
+
+Please report vulnerabilities according to [SECURITY.md](SECURITY.md).
+
+## Current limitations
+
+CityCity is a working agent application and engineering reference, not yet a fully reliable general-purpose city planner.
+
+### Agents and orchestration
+
+- **Limited Planner reasoning:** planning is primarily prompt-driven and does not yet include explicit constraint solving, reflection, backtracking, or global route optimization.
+- **Partial parallelism:** active Execute Agent branches run concurrently, but recursive Planner calls are still processed node by node. The workflow also runs inside one FastAPI process.
+- **Fixed search budget:** rounds, branches, and path depth have fixed limits, which can under-explore complex requests or over-process simple ones.
+- **Weak recovery model:** there is no distributed task queue, durable checkpoint, resume-from-node behavior, or cross-process orchestration.
+- **LLM output fragility:** planning and composition depend on structured JSON from the model. Parsing and fallbacks help, but malformed or semantically drifting output remains possible.
+
+### POI and route quality
+
+- **Limited POI ranking signals:** selection mainly uses Amap candidates, rating, distance, image completeness, and LLM judgment. It lacks saves, review volume, recent popularity, queues, and personal preference signals.
+- **Weak hotspot discovery:** a future version could use legally accessible and authorized engagement data—such as likes, saves, and discussion trends from lifestyle platforms—to identify genuinely popular POIs before building activities around them.
+- **Approximate routing:** coordinates and straight-line distance help compare places, but walking, driving, and transit time are not yet used to solve visit order.
+- **Stale availability risk:** a map result or LLM may select a temporarily closed or time-inappropriate POI. Real-time hours and multi-source verification are still missing.
+- **Incomplete constraints:** weather, budget, accessibility, child/pet friendliness, queue time, and reservation requirements are not enforced as hard constraints.
+- **Little personalization:** there is no long-term user profile, feedback learning, or group-preference negotiation.
+
+### Content, images, and product experience
+
+- **Inconsistent image quality:** images mostly come from map POI responses and may be low-resolution, poorly composed, duplicated, stale, or weakly related to the proposed activity.
+- **No image quality pipeline:** deduplication, sharpness checks, aesthetic scoring, OCR/watermark detection, semantic matching, and license checks are not yet implemented. Jimeng polishing remains optional.
+- **Human verification is still needed:** LLM-written prices, opening hours, transport details, and venue descriptions can sound plausible while being inaccurate.
+- **High latency and cost:** one complete request performs multiple map and LLM calls. A real local run took roughly two minutes, and branch-level progress is not yet streamed to the UI.
+- **Single-day scope:** hotels, inter-city transport, luggage, daily start/end points, and multi-day pacing are not modeled.
+- **Incomplete internationalization:** the built-in provider and prompts target Amap and Chinese. Overseas support needs provider adapters, localization, time zones, currencies, and address formats.
+- **No standard evaluation suite:** POI grounding, route feasibility, diversity, user satisfaction, latency, and cost are not yet measured against a stable benchmark.
+
+## Roadmap
+
+- Parallel recursive planning, resumable workflows, and durable agent checkpoints
+- Constraint-aware optimization using travel time, opening hours, budget, and weather
+- POI popularity and user-preference ranking from compliant data sources
+- Google Maps and Mapbox provider adapters
+- Image deduplication, quality scoring, semantic matching, and license checks
+- User feedback loops and personalized route ranking
+- Live UI streaming for branches, tools, and intermediate results
+- Benchmarks for grounding, diversity, feasibility, latency, and cost
+- Multilingual prompts, localization packs, and international cities
+- Multi-day, hotel, and inter-city transport planning
+
+## Acknowledgements
+
+Special thanks to **[Haven AI](https://havenai.cn/)** and **[EasyLaunch](https://easylaunch.aimos.cloud/)** for helping this project go from an agent-built application to a live website with one-click deployment.
+
+## Contributing
+
+Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+[MIT](LICENSE) © 2026 [Ethan Lian](https://github.com/lianyixin)
+

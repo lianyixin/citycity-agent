@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+pytest
+pytest-asyncio
+httpx
+python-dotenv
+psycopg2-binary
+pyjwt[crypto]
+cryptography
+

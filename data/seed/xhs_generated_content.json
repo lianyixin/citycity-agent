@@ -1,0 +1,25 @@
+[
+  {
+    "doc_id": "citycity-open-source-demo-1",
+    "query": "上海周末城市散步怎么玩",
+    "generated_at": "2026-08-14T00:00:00Z",
+    "xhs_content": {
+      "title": "上海周末散步3条路线",
+      "content": "周末不知道去哪，又不想把行程排得太满？整理了三条节奏不同的上海城市路线，可以按当天的心情直接选。\n\n【路线一｜滨江慢走】\n从滨江步道开始，吹吹江风、看看天际线，适合想放空和拍照的人。\n\n【路线二｜街区咖啡】\n选一片老街区慢慢逛，中间找家咖啡店休息，适合朋友聊天或一个人发呆。\n\n【路线三｜夜景收尾】\n傍晚从公园出发，吃完饭再去看夜景，路线轻松，也很适合约会。\n\n想舒服一点选路线一，想边逛边吃选路线二，想要氛围感就选路线三。",
+      "tags": [
+        "上海",
+        "城市散步",
+        "周末去哪",
+        "Citywalk",
+        "拍照",
+        "约会",
+        "不踩雷"
+      ],
+      "images": [
+        "https://images.unsplash.com/photo-1538428494232-9c0d8a3ab403?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1529921879218-f99546d03a89?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1548919973-5cef591cdbc9?auto=format&fit=crop&w=1200&q=80"
+      ]
+    }
+  }
+]

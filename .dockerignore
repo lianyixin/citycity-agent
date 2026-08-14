@@ -1,0 +1,32 @@
+# VCS
+.git
+.gitignore
+.env
+.env.*
+
+# Python
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/.pytest_cache
+**/.venv
+**/venv
+
+# Node
+frontend/node_modules
+# Note: frontend/dist is NOT ignored - it's built locally and shipped in the Docker image
+
+# Local deployment bindings
+.easylaunch/
+
+# Local SQLite DBs
+backend/data/
+data/*.db
+data/*.sqlite*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+docs/

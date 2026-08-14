@@ -1,0 +1,41 @@
+# Dependencies
+frontend/node_modules/
+
+# Build output (runner rebuilds)
+frontend/dist/
+
+# Local secret overrides — never commit
+backend/.env
+.env
+.env.*
+!.env.example
+
+# Local deployment bindings may contain resource identifiers or secrets
+.easylaunch/
+
+# Local databases
+backend/data/
+data/*.db
+data/*.sqlite*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+
+# TypeScript incremental/build output
+frontend/*.tsbuildinfo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Product demo mp4 lives in the product-demo GitHub Release, not in git.
+# Local preview: docs/assets/fetch-media.sh
+docs/assets/*.mp4
