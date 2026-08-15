@@ -129,7 +129,7 @@ Web Service API through a bundled script, so it requires `AMAP_API_KEY` and curr
 mainland China. Because an agent has no access to your device location, set a default city and
 coordinates once, or the skill will ask where you are before planning.
 
-### 🚀 Quick start
+### Install and use
 
 The most direct way is to hand the repository link to your agent. In Cursor, Claude Code, Codex,
 or another compatible agent, say:
