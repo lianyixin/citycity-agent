@@ -4,7 +4,7 @@
 
 <h1 align="center">CityCity Agent</h1>
 
-<p align="center"><strong>An AI agent for city activity planning: grounded, parallel, multi-route ideas for what to do next.</strong></p>
+<p align="center"><strong>An AI agent for city activity planning: grounded, parallel, multi-route ideas for what to do next.<br />Also includes a portable Planner / Executor skill for Cursor, Claude Code, Codex, and other coding agents.</strong></p>
 
 <p align="center">
   <a href="README_CN.md">中文文档</a> ·
@@ -111,6 +111,77 @@ For cities supported by Amap, change the default city, coordinates, and API key.
 - **Structured output** — routes, steps, POIs, generation logs, and final social cards remain queryable.
 - **Provider boundary** — map access is isolated behind `AmapTool`, making another provider adapter practical.
 - **Full-stack reference** — React/Vite frontend, FastAPI backend, SQLAlchemy persistence, auth, analytics, payment, and optional image polishing.
+
+## 🧩 Portable Planner / Executor Skill
+
+**A portable agent skill for parallel software engineering: Planner / Executor separation ·
+dependency-aware branches · bounded parallelism · partial-failure isolation · verified integration.**
+
+CityCity's core orchestration pattern is available as a standalone, vendor-neutral
+[Agent Skill](skills/citycity-planner-executor/SKILL.md). It turns a complex engineering request
+into focused branches, dispatches ready Executor agents concurrently, preserves successful work
+when one branch fails, and integrates the result against the original acceptance criteria.
+
+It follows the open `SKILL.md` format and does not depend on CityCity's Python backend, DeepSeek,
+or Amap. The same skill can be used by Cursor, Claude Code, Codex, and other compatible agents.
+If an agent cannot launch subagents, the workflow automatically falls back to sequential branch
+execution while keeping the same planning and verification contracts.
+
+### 🚀 Quick start
+
+The most direct way is to hand the repository link to your agent. In Cursor, Claude Code, Codex,
+or another compatible agent, say:
+
+```text
+Install the citycity-planner-executor skill for me:
+https://github.com/lianyixin/citycity-agent
+
+Install the skill from skills/citycity-planner-executor and link or copy it into my skills directory.
+```
+
+The agent can clone the repository and install the nested skill. Alternatively, use the Skills CLI:
+
+```bash
+npx skills add lianyixin/citycity-agent
+```
+
+Or install it manually:
+
+```bash
+git clone https://github.com/lianyixin/citycity-agent.git
+cd citycity-agent
+
+# Claude Code
+mkdir -p ~/.claude/skills
+ln -s "$(pwd)/skills/citycity-planner-executor" ~/.claude/skills/citycity-planner-executor
+
+# Codex
+mkdir -p ~/.codex/skills
+ln -s "$(pwd)/skills/citycity-planner-executor" ~/.codex/skills/citycity-planner-executor
+
+# Cursor
+mkdir -p ~/.cursor/skills
+ln -s "$(pwd)/skills/citycity-planner-executor" ~/.cursor/skills/citycity-planner-executor
+```
+
+For a repository-scoped installation, copy it to `.agents/skills/` instead. Restart the agent if
+it indexes skills only at session startup.
+
+Then make requests like:
+
+```text
+Use citycity-planner-executor to implement this multi-file feature and verify the integrated result.
+
+Use citycity-planner-executor to split this refactor into safe parallel branches with clear file ownership.
+
+Use citycity-planner-executor to investigate this intermittent CI failure using independent evidence-gathering branches.
+```
+
+The skill contains:
+
+- [`SKILL.md`](skills/citycity-planner-executor/SKILL.md) — trigger metadata and the complete workflow
+- [`references/protocol.md`](skills/citycity-planner-executor/references/protocol.md) — branch, result, scheduling, and failure contracts
+- [`references/examples.md`](skills/citycity-planner-executor/references/examples.md) — decomposition examples and sequential fallback
 
 ## 🏗️ Architecture
 

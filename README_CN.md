@@ -4,7 +4,7 @@
 
 <h1 align="center">CityCity Agent</h1>
 
-<p align="center"><strong>专注城市玩法规划：用并行多路线 Agent，回答“现在可以玩什么、应该怎么玩”。</strong></p>
+<p align="center"><strong>专注城市玩法规划：用并行多路线 Agent，回答“现在可以玩什么、应该怎么玩”。<br />同时提供可直接用于 Cursor、Claude Code、Codex 等 Coding Agent 的 Planner / Executor Skill。</strong></p>
 
 <p align="center">
   <a href="README.md">English</a> ·
@@ -111,6 +111,74 @@ CityCity Agent 从自然语言中理解地点、时间、同行人、预算与�
 - **结构化存储**：生成请求、日志、路线、POI、帖子和互动均可查询。
 - **地图 Provider 边界**：地图能力集中在 `AmapTool`，便于接入其他地图服务。
 - **完整全栈示例**：包含 React/Vite、FastAPI、SQLAlchemy，以及可选的认证、分析、支付和图片润色。
+
+## 🧩 可移植的 Planner / Executor Skill
+
+**一个面向并行软件工程的可移植 Agent Skill：Planner / Executor 分离 · 依赖感知分支 ·
+有界并发 · 局部失败隔离 · 统一集成验证。**
+
+CityCity 的核心编排模式已经封装为独立、厂商中立的
+[Agent Skill](skills/citycity-planner-executor/SKILL.md)。它会把复杂工程需求拆成目标明确的分支，
+并发调度已就绪的 Executor Agent，在单个分支失败时保留其他成功结果，最后根据原始验收标准统一集成。
+
+这个 Skill 遵循开放的 `SKILL.md` 格式，不依赖 CityCity 的 Python 后端、DeepSeek 或高德地图。
+Cursor、Claude Code、Codex 以及其他兼容 Agent 都可以使用；如果宿主 Agent 不支持子 Agent，
+流程会自动降级为串行执行，同时保留相同的规划、分支隔离和验证协议。
+
+### 🚀 快速开始
+
+最直接的方式是把仓库链接交给你的 Agent。在 Cursor、Claude Code、Codex 或其他兼容 Agent 中直接说：
+
+```text
+请帮我安装 citycity-planner-executor skill：
+https://github.com/lianyixin/citycity-agent
+
+请安装 skills/citycity-planner-executor 下的 Skill，并链接或复制到我的 skills 目录。
+```
+
+Agent 会克隆仓库并安装其中的 Skill。也可以使用 Skills CLI：
+
+```bash
+npx skills add lianyixin/citycity-agent
+```
+
+或者手动安装：
+
+```bash
+git clone https://github.com/lianyixin/citycity-agent.git
+cd citycity-agent
+
+# Claude Code
+mkdir -p ~/.claude/skills
+ln -s "$(pwd)/skills/citycity-planner-executor" ~/.claude/skills/citycity-planner-executor
+
+# Codex
+mkdir -p ~/.codex/skills
+ln -s "$(pwd)/skills/citycity-planner-executor" ~/.codex/skills/citycity-planner-executor
+
+# Cursor
+mkdir -p ~/.cursor/skills
+ln -s "$(pwd)/skills/citycity-planner-executor" ~/.cursor/skills/citycity-planner-executor
+```
+
+如需仅在当前项目中使用，也可以复制到 `.agents/skills/`。如果 Agent 只在会话启动时索引 Skill，
+请在安装后重启会话。
+
+然后可以这样调用：
+
+```text
+请使用 citycity-planner-executor 实现这个多文件功能，并验证最终集成结果。
+
+请使用 citycity-planner-executor 将这次重构拆成文件所有权清晰、可安全并行的分支。
+
+请使用 citycity-planner-executor，通过多个独立取证分支排查这个偶发 CI 错误。
+```
+
+Skill 包含：
+
+- [`SKILL.md`](skills/citycity-planner-executor/SKILL.md)：触发元数据与完整工作流
+- [`references/protocol.md`](skills/citycity-planner-executor/references/protocol.md)：分支、结果、调度和失败处理协议
+- [`references/examples.md`](skills/citycity-planner-executor/references/examples.md)：任务拆分示例与串行降级方式
 
 ## 🏗️ 技术架构
 
