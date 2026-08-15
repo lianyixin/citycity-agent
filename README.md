@@ -4,7 +4,7 @@
 
 <h1 align="center">CityCity Agent</h1>
 
-<p align="center"><strong>An AI agent for city activity planning: grounded, parallel, multi-route ideas for what to do next.<br />Also includes a portable Planner / Executor skill for Cursor, Claude Code, Codex, and other coding agents.</strong></p>
+<p align="center"><strong>An AI agent for city activity planning: grounded, parallel, multi-route ideas for what to do next.<br />Also shipped as an agent skill, so Cursor, Claude Code, and Codex can plan city routes for you.</strong></p>
 
 <p align="center">
   <a href="README_CN.md">中文文档</a> ·
@@ -112,20 +112,22 @@ For cities supported by Amap, change the default city, coordinates, and API key.
 - **Provider boundary** — map access is isolated behind `AmapTool`, making another provider adapter practical.
 - **Full-stack reference** — React/Vite frontend, FastAPI backend, SQLAlchemy persistence, auth, analytics, payment, and optional image polishing.
 
-## 🧩 Portable Planner / Executor Skill
+## 🧩 Agent Skill: city play planning in your own agent
 
-**A portable agent skill for parallel software engineering: Planner / Executor separation ·
-dependency-aware branches · bounded parallelism · partial-failure isolation · verified integration.**
+**An agent skill for grounded city activity planning: Planner fan-out · parallel Execute branches ·
+real Amap POI verification · multiple comparable routes.**
 
-CityCity's core orchestration pattern is available as a standalone, vendor-neutral
-[Agent Skill](skills/citycity-planner-executor/SKILL.md). It turns a complex engineering request
-into focused branches, dispatches ready Executor agents concurrently, preserves successful work
-when one branch fails, and integrates the result against the original acceptance criteria.
+The same Planner / Execute workflow that powers the live product is packaged as a standalone
+[Agent Skill](skills/citycity-play-planner/SKILL.md). Once installed, your coding agent can answer
+city activity questions directly: it extracts intent, fans out several distinct play directions,
+verifies each stop against live Amap POI data in parallel, expands promising branches into
+multi-stop routes, and returns several routes you can compare.
 
-It follows the open `SKILL.md` format and does not depend on CityCity's Python backend, DeepSeek,
-or Amap. The same skill can be used by Cursor, Claude Code, Codex, and other compatible agents.
-If an agent cannot launch subagents, the workflow automatically falls back to sequential branch
-execution while keeping the same planning and verification contracts.
+It follows the open `SKILL.md` format and works in Cursor, Claude Code, Codex, and other
+compatible agents. It does not need CityCity's backend or DeepSeek; POI grounding calls the Amap
+Web Service API through a bundled script, so it requires `AMAP_API_KEY` and currently covers
+mainland China. Because an agent has no access to your device location, set a default city and
+coordinates once, or the skill will ask where you are before planning.
 
 ### 🚀 Quick start
 
@@ -133,55 +135,59 @@ The most direct way is to hand the repository link to your agent. In Cursor, Cla
 or another compatible agent, say:
 
 ```text
-Install the citycity-planner-executor skill for me:
-https://github.com/lianyixin/citycity-agent
-
-Install the skill from skills/citycity-planner-executor and link or copy it into my skills directory.
+Install this skill for me: https://github.com/lianyixin/citycity-agent
+It lives in skills/citycity-play-planner.
 ```
 
-The agent can clone the repository and install the nested skill. Alternatively, use the Skills CLI:
+The agent will clone the repo and link the skill into your skills directory. Or install with the
+skills CLI / manually:
 
 ```bash
 npx skills add lianyixin/citycity-agent
 ```
 
-Or install it manually:
-
 ```bash
 git clone https://github.com/lianyixin/citycity-agent.git
 cd citycity-agent
 
-# Claude Code
-mkdir -p ~/.claude/skills
-ln -s "$(pwd)/skills/citycity-planner-executor" ~/.claude/skills/citycity-planner-executor
-
-# Codex
-mkdir -p ~/.codex/skills
-ln -s "$(pwd)/skills/citycity-planner-executor" ~/.codex/skills/citycity-planner-executor
-
-# Cursor
-mkdir -p ~/.cursor/skills
-ln -s "$(pwd)/skills/citycity-planner-executor" ~/.cursor/skills/citycity-planner-executor
+ln -s "$(pwd)/skills/citycity-play-planner" ~/.claude/skills/citycity-play-planner   # Claude Code
+# or
+ln -s "$(pwd)/skills/citycity-play-planner" ~/.codex/skills/citycity-play-planner    # Codex
+# or
+ln -s "$(pwd)/skills/citycity-play-planner" ~/.cursor/skills/citycity-play-planner   # Cursor
 ```
 
-For a repository-scoped installation, copy it to `.agents/skills/` instead. Restart the agent if
-it indexes skills only at session startup.
+Set your Amap key so the skill can ground places. Unlike the web product, an agent cannot read
+your device location, so also give it a home base — otherwise it has to ask where you are every
+time:
+
+```bash
+export AMAP_API_KEY=your_server_side_amap_key
+
+# Optional but recommended: your default city and starting point
+export DEFAULT_CITY=上海
+export DEFAULT_CITY_LAT=31.2304
+export DEFAULT_CITY_LNG=121.4737
+```
+
+Restart the agent if it indexes skills only at session startup.
 
 Then make requests like:
 
 ```text
-Use citycity-planner-executor to implement this multi-file feature and verify the integrated result.
+上海长宁今晚有什么适合两个人玩的？
 
-Use citycity-planner-executor to split this refactor into safe parallel branches with clear file ownership.
+Use citycity-play-planner to plan a relaxed Saturday afternoon walk starting from Jing'an Temple, with coffee and photo stops.
 
-Use citycity-planner-executor to investigate this intermittent CI failure using independent evidence-gathering branches.
+雨天在浦东带孩子玩什么？希望室内为主，地点不要太分散。
 ```
 
 The skill contains:
 
-- [`SKILL.md`](skills/citycity-planner-executor/SKILL.md) — trigger metadata and the complete workflow
-- [`references/protocol.md`](skills/citycity-planner-executor/references/protocol.md) — branch, result, scheduling, and failure contracts
-- [`references/examples.md`](skills/citycity-planner-executor/references/examples.md) — decomposition examples and sequential fallback
+- [`SKILL.md`](skills/citycity-play-planner/SKILL.md) — trigger metadata and the seven-step planning workflow
+- [`scripts/amap_poi.py`](skills/citycity-play-planner/scripts/amap_poi.py) — Amap POI search and geocoding, standard library only
+- [`references/route-quality.md`](skills/citycity-play-planner/references/route-quality.md) — POI selection, filtering, deduplication, and diversity rules
+- [`references/worked-example.md`](skills/citycity-play-planner/references/worked-example.md) — a full run from request to final routes
 
 ## 🏗️ Architecture
 

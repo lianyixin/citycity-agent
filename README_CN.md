@@ -4,7 +4,7 @@
 
 <h1 align="center">CityCity Agent</h1>
 
-<p align="center"><strong>专注城市玩法规划：用并行多路线 Agent，回答“现在可以玩什么、应该怎么玩”。<br />同时提供可直接用于 Cursor、Claude Code、Codex 等 Coding Agent 的 Planner / Executor Skill。</strong></p>
+<p align="center"><strong>专注城市玩法规划：用并行多路线 Agent，回答“现在可以玩什么、应该怎么玩”。<br />同时封装为 Agent Skill，让 Cursor、Claude Code、Codex 也能直接帮你规划城市玩法。</strong></p>
 
 <p align="center">
   <a href="README.md">English</a> ·
@@ -112,73 +112,78 @@ CityCity Agent 从自然语言中理解地点、时间、同行人、预算与�
 - **地图 Provider 边界**：地图能力集中在 `AmapTool`，便于接入其他地图服务。
 - **完整全栈示例**：包含 React/Vite、FastAPI、SQLAlchemy，以及可选的认证、分析、支付和图片润色。
 
-## 🧩 可移植的 Planner / Executor Skill
+## 🧩 Agent Skill：让你的 Agent 也会规划城市玩法
 
-**一个面向并行软件工程的可移植 Agent Skill：Planner / Executor 分离 · 依赖感知分支 ·
-有界并发 · 局部失败隔离 · 统一集成验证。**
+**一个用于城市玩法规划的 Agent Skill：Planner 展开多方向 · Execute 并行分支 ·
+真实高德 POI 验证 · 一次给出多条可对比路线。**
 
-CityCity 的核心编排模式已经封装为独立、厂商中立的
-[Agent Skill](skills/citycity-planner-executor/SKILL.md)。它会把复杂工程需求拆成目标明确的分支，
-并发调度已就绪的 Executor Agent，在单个分支失败时保留其他成功结果，最后根据原始验收标准统一集成。
+驱动线上产品的 Planner / Execute 工作流已封装为独立的
+[Agent Skill](skills/citycity-play-planner/SKILL.md)。安装后，你的 Coding Agent 就能直接回答城市玩法问题：
+先理解意图，再展开多个差异化玩法方向，并行调用真实高德 POI 数据验证每一站，
+把有潜力的分支扩展成多地点路线，最后给出多条可直接比较的玩法路线。
 
-这个 Skill 遵循开放的 `SKILL.md` 格式，不依赖 CityCity 的 Python 后端、DeepSeek 或高德地图。
-Cursor、Claude Code、Codex 以及其他兼容 Agent 都可以使用；如果宿主 Agent 不支持子 Agent，
-流程会自动降级为串行执行，同时保留相同的规划、分支隔离和验证协议。
+该 Skill 遵循开放的 `SKILL.md` 格式，可用于 Cursor、Claude Code、Codex 等兼容 Agent。
+它不依赖 CityCity 后端或 DeepSeek；地点验证通过内置脚本调用高德 Web Service API，
+因此需要配置 `AMAP_API_KEY`，目前覆盖范围为中国大陆城市。
+另外，Agent 无法像网页端那样读取你的设备定位，建议一次性配置默认城市和坐标，
+否则每次规划前它都需要先问你在哪。
 
 ### 🚀 快速开始
 
 最直接的方式是把仓库链接交给你的 Agent。在 Cursor、Claude Code、Codex 或其他兼容 Agent 中直接说：
 
 ```text
-请帮我安装 citycity-planner-executor skill：
-https://github.com/lianyixin/citycity-agent
-
-请安装 skills/citycity-planner-executor 下的 Skill，并链接或复制到我的 skills 目录。
+帮我安装这个 skill：https://github.com/lianyixin/citycity-agent
+它在 skills/citycity-play-planner 目录下。
 ```
 
-Agent 会克隆仓库并安装其中的 Skill。也可以使用 Skills CLI：
+Agent 会克隆仓库并把 Skill 链接到你的 skills 目录。也可以用 skills CLI 或手动安装：
 
 ```bash
 npx skills add lianyixin/citycity-agent
 ```
 
-或者手动安装：
-
 ```bash
 git clone https://github.com/lianyixin/citycity-agent.git
 cd citycity-agent
 
-# Claude Code
-mkdir -p ~/.claude/skills
-ln -s "$(pwd)/skills/citycity-planner-executor" ~/.claude/skills/citycity-planner-executor
-
-# Codex
-mkdir -p ~/.codex/skills
-ln -s "$(pwd)/skills/citycity-planner-executor" ~/.codex/skills/citycity-planner-executor
-
-# Cursor
-mkdir -p ~/.cursor/skills
-ln -s "$(pwd)/skills/citycity-planner-executor" ~/.cursor/skills/citycity-planner-executor
+ln -s "$(pwd)/skills/citycity-play-planner" ~/.claude/skills/citycity-play-planner   # Claude Code
+# 或
+ln -s "$(pwd)/skills/citycity-play-planner" ~/.codex/skills/citycity-play-planner    # Codex
+# 或
+ln -s "$(pwd)/skills/citycity-play-planner" ~/.cursor/skills/citycity-play-planner   # Cursor
 ```
 
-如需仅在当前项目中使用，也可以复制到 `.agents/skills/`。如果 Agent 只在会话启动时索引 Skill，
-请在安装后重启会话。
+配置高德 Key 以便验证真实地点。与网页版不同，Agent 读不到你的设备定位，
+因此建议同时配置默认位置，否则每次都要先问你在哪：
 
-然后可以这样调用：
+```bash
+export AMAP_API_KEY=你的服务端高德Key
+
+# 可选但推荐：默认城市与出发坐标
+export DEFAULT_CITY=上海
+export DEFAULT_CITY_LAT=31.2304
+export DEFAULT_CITY_LNG=121.4737
+```
+
+如果 Agent 只在会话启动时索引 Skill，请在安装后重启会话。
+
+然后就可以这样提问：
 
 ```text
-请使用 citycity-planner-executor 实现这个多文件功能，并验证最终集成结果。
+上海长宁今晚有什么适合两个人玩的？
 
-请使用 citycity-planner-executor 将这次重构拆成文件所有权清晰、可安全并行的分支。
+周六下午从静安寺出发，和朋友散步、喝咖啡，想要一条不累的路线
 
-请使用 citycity-planner-executor，通过多个独立取证分支排查这个偶发 CI 错误。
+雨天在浦东带孩子玩什么？希望室内为主，地点不要太分散
 ```
 
 Skill 包含：
 
-- [`SKILL.md`](skills/citycity-planner-executor/SKILL.md)：触发元数据与完整工作流
-- [`references/protocol.md`](skills/citycity-planner-executor/references/protocol.md)：分支、结果、调度和失败处理协议
-- [`references/examples.md`](skills/citycity-planner-executor/references/examples.md)：任务拆分示例与串行降级方式
+- [`SKILL.md`](skills/citycity-play-planner/SKILL.md)：触发元数据与七步规划流程
+- [`scripts/amap_poi.py`](skills/citycity-play-planner/scripts/amap_poi.py)：高德 POI 搜索与地理编码，仅依赖标准库
+- [`references/route-quality.md`](skills/citycity-play-planner/references/route-quality.md)：选点、过滤、去重与多样性规则
+- [`references/worked-example.md`](skills/citycity-play-planner/references/worked-example.md)：从需求到最终路线的完整示例
 
 ## 🏗️ 技术架构
 
