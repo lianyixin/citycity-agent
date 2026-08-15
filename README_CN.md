@@ -18,14 +18,34 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" /></a>
 </p>
 
-CityCity Agent 专注做好一件事：**玩法规划**——帮助用户决定玩什么、去哪里，以及如何把多个地点组合成真正可执行的玩法路线。它把“上海长宁今晚有什么好玩的”这类开放问题，转换为多条有真实地点支撑的方案。Planner Agent 先生成多样化分支，多个 Execute Agent 再以受控并发的方式搜索 POI、筛选地点并递归扩展路线。
+CityCity Agent 把“上海长宁今晚有什么好玩的”这类开放问题，转换成**多条有真实地点支撑的玩法路线**。Planner Agent 先生成多样化分支，多个 Execute Agent 再以受控并发的方式搜索 POI、筛选地点并递归扩展路线。
+
+## 🚀 核心卖点
+
+| | 常见 Travel Agent | **CityCity Agent** |
+| --- | --- | --- |
+| **规划方式** | 往往一次只输出 **1** 条行程 | **并行探索 N 条玩法路线**，让用户自己选 |
+| **产品定位** | 偏多日旅行：酒店、机票、跨城交通 | 专注 **Citywalk / 城市玩法规划**：几小时到一天内怎么玩 |
+| **落地方式** | 容易停留在泛化建议 | 每条分支都用真实地图 POI 验证后再成稿 |
+
+> [!IMPORTANT]
+> **1. 先做并行多路径规划。** 常见 Travel Agent 容易过早押注单一方案；CityCity Agent 用多个 Execute Agent 并发探索，一次请求就能返回多种不同玩法。
+>
+> **2. 先做城市玩法规划。** 这不是泛化的多日 Travel Agent，而是专门回答 Citywalk、约会、亲子、美食、拍照、夜游这类“现在周边可以怎么玩”的问题。
+
+## 🎬 在线演示
+
+**[体验「上海 City 不 City」→](https://shanghaicitycity-web.havenai.online/)**
+
+https://github.com/user-attachments/assets/692651f0-d87b-4a2e-b287-cab1bd7e0bad
+
+**[▶ 下载高清产品演示视频](https://github.com/lianyixin/citycity-agent/releases/download/product-demo/product-demo.mp4)** · [查看 Release](https://github.com/lianyixin/citycity-agent/releases/tag/product-demo)
+
+本项目生成的玩法攻略也在持续发布到小红书账号[「上海 City 不 City」](https://www.xiaohongshu.com/user/profile/62aa83ef000000001b02b574)（**400 位粉丝**）。
 
 ## 🎯 项目背景
 
 传统地图擅长回答“某家店在哪里”，攻略平台擅长展示“别人去过哪里”，但当用户提出“今晚下班后在上海长宁和朋友玩什么”“周末下午想找一条不累、能拍照的路线”时，仍需要自己完成地点搜索、筛选、排序和路线组合。
-
-> [!IMPORTANT]
-> **这是一个玩法规划 Agent。** 它不是城市建设意义上的“城市规划”，也不是泛化的多日旅游行程生成器；它理解用户当下的场景，探索多个玩法方向，用真实地点验证，再组织成可以直接照着玩的路线。
 
 CityCity Agent 从自然语言中理解地点、时间、同行人、预算与偏好，先规划多个玩法方向，再调用地图 POI 数据并行验证，最后组织成可直接选择的多路线方案。线上版本以“上海 City 不 City”为产品形态，同时保留向其他城市和地图服务扩展的能力。
 
@@ -53,20 +73,6 @@ CityCity Agent 从自然语言中理解地点、时间、同行人、预算与�
 > **当前建议规划一天以内的行程。** CityCity Agent 目前更适合几小时、半日或一日内的 Citywalk、约会、亲子、美食、拍照和夜游路线。暂不建议咨询跨天、多城市或包含住宿衔接的旅行计划，因为当前 Agent 还没有酒店、跨城交通和多日状态优化能力。
 
 线上版本聚焦上海。对于高德覆盖的城市，可以修改默认城市、坐标和 API Key；对于海外城市，需要实现 Google Maps、Mapbox 等地图 Provider Adapter，而 Planner/Execute 编排可以继续复用。
-
-## 🎬 在线演示
-
-**[体验「上海 City 不 City」→](https://shanghaicitycity-web.havenai.online/)**
-
-https://github.com/user-attachments/assets/692651f0-d87b-4a2e-b287-cab1bd7e0bad
-
-**[▶ 下载高清产品演示视频](https://github.com/lianyixin/citycity-agent/releases/download/product-demo/product-demo.mp4)** · [查看 Release](https://github.com/lianyixin/citycity-agent/releases/tag/product-demo)
-
-> 视频以 GitHub Release 资源托管，不进入 git 历史。本地预览可运行 `docs/assets/fetch-media.sh`。也可以直接打开[线上网站](https://shanghaicitycity-web.havenai.online/)体验。
-
-## 🌏 真实内容验证
-
-本项目生成的城市玩法攻略已持续发布到小红书账号[「上海 City 不 City」](https://www.xiaohongshu.com/user/profile/62aa83ef000000001b02b574)，目前账号已获得 **400 位粉丝**。真实发布反馈也在帮助项目持续改进路线质量、选题方向与内容表达。
 
 ## ✨ 项目包含什么
 
