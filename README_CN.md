@@ -246,8 +246,7 @@ async def suggest_locations(query, location, city, limit): ...
 - 所有 `.env.*`（除 `.env.example`）均已被 `.gitignore` 排除。
 - 如需导出自有 CDN 图片，可通过 `EXTRA_IMAGE_HOSTS` 增加逗号分隔的公共图片域名。
 - `VITE_*` 会进入浏览器产物，只能放公开配置，绝不能放密钥。
-- 本开源副本不包含原私有仓库的 Git 历史、生产数据库地址或部署资源绑定。
-- 如果某个密钥曾出现在其他 Git 历史中，仅删除文件并不够，必须轮换该密钥。
+- 如果密钥被误提交到 Git，仅删除文件不够，必须立刻轮换该密钥。
 
 ## ✅ 测试
 

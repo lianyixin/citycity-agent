@@ -300,10 +300,10 @@ Keep `.env.production` outside Git and inject it through your deployment platfor
 
 ## 🔐 Security
 
-- This repository does not contain production credentials or deployment bindings.
-- Secrets stay server-side and are loaded from environment variables.
-- The copied open-source history starts clean; it does not include the private source repository history.
-- If a credential has ever been committed elsewhere, removing it from the latest tree is insufficient—rotate it.
+- Keep API keys and other secrets in server-side environment variables, never in the frontend or in git.
+- Copy [`.env.example`](.env.example) for local setup; real `.env.*` files are gitignored.
+- `VITE_*` values are embedded in the browser bundle, so they must stay public-only.
+- If a secret is accidentally committed, rotate it immediately—deleting the file from the latest commit is not enough.
 
 Please report vulnerabilities according to [SECURITY.md](SECURITY.md).
 
