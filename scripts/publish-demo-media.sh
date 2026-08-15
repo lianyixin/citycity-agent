@@ -4,7 +4,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 ASSET="${ROOT}/docs/assets/product-demo.mp4"
-REPO="${GITHUB_REPOSITORY:-lianyixin/citycity}"
+REPO="${GITHUB_REPOSITORY:-lianyixin/citycity-agent}"
 TAG="${MEDIA_RELEASE_TAG:-product-demo}"
 
 if [[ ! -f "$ASSET" ]]; then

@@ -15,7 +15,7 @@ Please allow reasonable time to investigate before public disclosure.
 
 ## Secrets
 
-CityCity loads secrets from environment variables. Never commit:
+CityCity Agent loads secrets from environment variables. Never commit:
 
 - `.env.development`, `.env.production`, or `.env.local`
 - map or LLM API keys

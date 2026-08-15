@@ -1,24 +1,26 @@
 <p align="center">
-  <img src="frontend/public/brand-logo.png" width="112" alt="CityCity Logo" />
+  <img src="frontend/public/brand-logo.png" width="112" alt="CityCity Agent Logo" />
 </p>
 
-<h1 align="center">CityCity</h1>
+<h1 align="center">CityCity Agent</h1>
 
-<p align="center"><strong>Parallel multi-route AI agents for discovering what to do in a city.</strong></p>
+<p align="center"><strong>An AI agent for city activity planning: grounded, parallel, multi-route ideas for what to do next.</strong></p>
 
 <p align="center">
   <a href="README_CN.md">中文文档</a> ·
   <a href="https://shanghaicitycity-web.havenai.online/">Live Demo</a> ·
-  <a href="https://github.com/lianyixin/citycity">GitHub</a>
+  <a href="https://github.com/lianyixin/citycity-agent">GitHub</a>
 </p>
 
-CityCity turns an open-ended request such as “What can I do around Shanghai Changning tonight?” into several grounded city-play routes. Instead of committing to one plan too early, a Planner Agent creates diverse branches and bounded parallel Execute Agents search, evaluate, and expand those branches against real POI data.
+CityCity Agent is built for one specific job: **city activity planning** — helping people decide what to do, where to go, and how to combine places into a playable route. It turns an open-ended request such as “What can I do around Shanghai Changning tonight?” into several grounded city-play routes. Instead of committing to one plan too early, a Planner Agent creates diverse branches and bounded parallel Execute Agents search, evaluate, and expand those branches against real POI data.
 
 ## Background
 
 Maps are good at answering “Where is this place?” and travel feeds are good at showing “Where did other people go?” Neither fully answers situational questions such as “What can two friends do around Shanghai Changning after work?” or “Plan a relaxed, photo-friendly Saturday afternoon.”
 
-CityCity is an agent experiment for **city activity planning**. It extracts location, time, companions, budget, and preferences from natural language; proposes multiple activity directions; validates them against map POIs in parallel; and composes several routes that the user can choose from. The live product is Shanghai-focused, while the workflow is designed to extend to other cities and map providers.
+This project is not an urban-planning tool or a generic multi-day itinerary generator. It focuses on **play planning**: understanding the user's current context, exploring several activity ideas, grounding them in real places, and organizing them into routes that can actually be followed.
+
+CityCity Agent extracts location, time, companions, budget, and preferences from natural language; proposes multiple activity directions; validates them against map POIs in parallel; and composes several routes that the user can choose from. The live product is Shanghai-focused, while the workflow is designed to extend to other cities and map providers.
 
 ## Try these queries
 
@@ -40,7 +42,7 @@ I am staying near the Bund. Plan a morning city walk followed by a local Shangha
 How should I spend half a day around West Lake in Hangzhou without only visiting the busiest attractions?
 ```
 
-> **Keep the trip within one day for now.** CityCity is currently best suited to a few hours, a half day, or a single day of city walks, dates, family activities, food trips, photography, and nightlife. Multi-day, multi-city, hotel, and long-distance transport planning are not yet optimized.
+> **Keep the trip within one day for now.** CityCity Agent is currently best suited to a few hours, a half day, or a single day of city walks, dates, family activities, food trips, photography, and nightlife. Multi-day, multi-city, hotel, and long-distance transport planning are not yet optimized.
 
 For cities supported by Amap, change the default city, coordinates, and API key. For regions outside Amap coverage, implement a Google Maps, Mapbox, or other map-provider adapter while reusing the Planner/Execute orchestration.
 
@@ -48,12 +50,15 @@ For cities supported by Amap, change the default city, coordinates, and API key.
 
 **[Try Shanghai CityCity →](https://shanghaicitycity-web.havenai.online/)**
 
-<video src="https://github.com/lianyixin/citycity/releases/download/product-demo/product-demo.mp4" controls width="100%" poster="docs/assets/demo-video-placeholder.svg">
-  Your browser does not support the video tag.
-  <a href="https://github.com/lianyixin/citycity/releases/download/product-demo/product-demo.mp4">Download the product demo video</a>.
-</video>
+https://github.com/user-attachments/assets/20725cb5-ca2a-4abc-a05a-ac0446129e43
 
-> Product walkthrough above (video hosted via [GitHub Release](https://github.com/lianyixin/citycity/releases/tag/product-demo), not in git). Local copy: `docs/assets/fetch-media.sh`. You can also try the [live website](https://shanghaicitycity-web.havenai.online/).
+**[▶ Download the HD product walkthrough](https://github.com/lianyixin/citycity-agent/releases/download/product-demo/product-demo.mp4)** · [Release page](https://github.com/lianyixin/citycity-agent/releases/tag/product-demo)
+
+> The video is hosted as a GitHub Release asset rather than tracked in git. Local copy: `docs/assets/fetch-media.sh`. You can also try the [live website](https://shanghaicitycity-web.havenai.online/).
+
+## Used in the real world
+
+Routes generated by this project are being published on the Xiaohongshu account [上海 City 不 City](https://www.xiaohongshu.com/user/profile/62aa83ef000000001b02b574). The account has grown to **400 followers**, providing real-world feedback on route quality, topic selection, and content presentation.
 
 ## What's included
 
@@ -67,7 +72,7 @@ For cities supported by Amap, change the default city, coordinates, and API key.
 - Optional Logto auth, Umami analytics, Alipay subscriptions, and Jimeng image polishing
 - Docker deployment, sanitized seed content, bilingual documentation, and backend tests
 
-## Why CityCity
+## Why CityCity Agent
 
 - **Parallel route exploration** — multiple itinerary branches run concurrently instead of one serial chain.
 - **Planner / Execute separation** — the LLM plans intent; tool-backed execution grounds each step in real POIs.
@@ -82,40 +87,36 @@ For cities supported by Amap, change the default city, coordinates, and API key.
 
 ```mermaid
 flowchart LR
-    U[User request] --> W[React + Vite]
-    W --> API[FastAPI API]
-    API --> G[Generation Service]
-    G --> P[Planner Agent]
-    P --> B[Route branch queue]
+    U["User request"] --> FE["React / Vite"]
+    FE --> API["FastAPI"]
+    API --> G["Generation service"]
+    G --> P["Planner Agent"]
+    P --> Q["Route plans"]
 
-    B --> E1[Execute branch 1]
-    B --> E2[Execute branch 2]
-    B --> E3[Execute branch N]
-
-    subgraph Parallel route execution
-      E1
-      E2
-      E3
+    subgraph EXEC["Bounded parallel execution"]
+        direction TB
+        E1["Execute Agent A"]
+        E2["Execute Agent B"]
+        EN["Execute Agent N"]
     end
 
-    E1 --> M[Map / POI adapter]
+    Q --> E1
+    Q --> E2
+    Q --> EN
+
+    E1 --> M["Map / POI adapter"]
     E2 --> M
-    E3 --> M
-    E1 --> L[LLM POI selector]
+    EN --> M
+    E1 --> L["LLM POI selector"]
     E2 --> L
-    E3 --> L
+    EN --> L
 
-    M --> C[(POI cache)]
-    E1 --> R[Recursive planner]
-    E2 --> R
-    E3 --> R
-    R --> B
-
-    E1 --> A[Route aggregator]
+    M --> C[("POI cache")]
+    E1 --> A["Route aggregator"]
     E2 --> A
-    E3 --> A
-    A --> X[Content composer]
-    X --> DB[(SQLite / PostgreSQL)]
+    EN --> A
+    A --> X["Content composer"]
+    X --> DB[("SQLite / PostgreSQL")]
     DB --> API
 ```
 
@@ -131,7 +132,7 @@ sequenceDiagram
     participant LLM
 
     User->>Planner: query + location + time + preferences
-    Planner-->>Orchestrator: 3–N diverse route plans
+    Planner-->>Orchestrator: 3 to N diverse route plans
     Orchestrator->>ExecuteAgents: dispatch branches (bounded parallelism)
     par Route A
       ExecuteAgents->>Map: search POIs
@@ -173,8 +174,8 @@ The implementation uses `MAX_PARALLEL_ROUTES` (default `4`) to cap active route 
 ### 1. Configure
 
 ```bash
-git clone https://github.com/lianyixin/citycity.git
-cd citycity
+git clone https://github.com/lianyixin/citycity-agent.git
+cd citycity-agent
 cp .env.example .env.development
 ```
 
@@ -283,8 +284,8 @@ Build the frontend first, then build the image:
 
 ```bash
 cd frontend && npm ci && npm run build && cd ..
-docker build -t citycity .
-docker run --rm -p 8001:8000 --env-file .env.production citycity
+docker build -t citycity-agent .
+docker run --rm -p 8001:8000 --env-file .env.production citycity-agent
 ```
 
 Keep `.env.production` outside Git and inject it through your deployment platform.
@@ -300,7 +301,7 @@ Please report vulnerabilities according to [SECURITY.md](SECURITY.md).
 
 ## Current limitations
 
-CityCity is a working agent application and engineering reference, not yet a fully reliable general-purpose city planner.
+CityCity Agent is a working agent application and engineering reference, not yet a fully reliable general-purpose city planner.
 
 ### Agents and orchestration
 

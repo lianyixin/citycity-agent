@@ -1,24 +1,26 @@
 <p align="center">
-  <img src="frontend/public/brand-logo.png" width="112" alt="CityCity Logo" />
+  <img src="frontend/public/brand-logo.png" width="112" alt="CityCity Agent Logo" />
 </p>
 
-<h1 align="center">CityCity</h1>
+<h1 align="center">CityCity Agent</h1>
 
-<p align="center"><strong>用并行多路线 Agent，探索一座城市里“现在可以玩什么”。</strong></p>
+<p align="center"><strong>专注城市玩法规划：用并行多路线 Agent，回答“现在可以玩什么、应该怎么玩”。</strong></p>
 
 <p align="center">
   <a href="README.md">English</a> ·
   <a href="https://shanghaicitycity-web.havenai.online/">在线演示</a> ·
-  <a href="https://github.com/lianyixin/citycity">GitHub</a>
+  <a href="https://github.com/lianyixin/citycity-agent">GitHub</a>
 </p>
 
-CityCity 把“上海长宁今晚有什么好玩的”这类开放问题，转换为多条有真实地点支撑的城市玩法路线。它不会过早押注单一方案：Planner Agent 先生成多样化分支，多个 Execute Agent 再以受控并发的方式搜索 POI、筛选地点并递归扩展路线。
+CityCity Agent 专注做好一件事：**玩法规划**——帮助用户决定玩什么、去哪里，以及如何把多个地点组合成真正可执行的玩法路线。它把“上海长宁今晚有什么好玩的”这类开放问题，转换为多条有真实地点支撑的方案。Planner Agent 先生成多样化分支，多个 Execute Agent 再以受控并发的方式搜索 POI、筛选地点并递归扩展路线。
 
 ## 项目背景
 
 传统地图擅长回答“某家店在哪里”，攻略平台擅长展示“别人去过哪里”，但当用户提出“今晚下班后在上海长宁和朋友玩什么”“周末下午想找一条不累、能拍照的路线”时，仍需要自己完成地点搜索、筛选、排序和路线组合。
 
-CityCity 是一个面向**城市玩法规划**的 Agent 实验项目：它从自然语言中理解地点、时间、同行人、预算与偏好，先规划多个玩法方向，再调用地图 POI 数据并行验证，最后组织成可直接选择的多路线方案。线上版本以“上海 City 不 City”为产品形态，同时保留向其他城市和地图服务扩展的能力。
+本项目不是做城市建设意义上的“城市规划”，也不是泛化的多日旅游行程生成器，而是做**城市玩法规划**：理解用户当下的场景，探索多个玩法方向，用真实地点验证，再组织成可以直接照着玩的路线。
+
+CityCity Agent 从自然语言中理解地点、时间、同行人、预算与偏好，先规划多个玩法方向，再调用地图 POI 数据并行验证，最后组织成可直接选择的多路线方案。线上版本以“上海 City 不 City”为产品形态，同时保留向其他城市和地图服务扩展的能力。
 
 ## 可以这样问
 
@@ -40,7 +42,7 @@ CityCity 是一个面向**城市玩法规划**的 Agent 实验项目：它从自
 杭州西湖周边半天怎么玩？不想只去热门景点
 ```
 
-> **当前建议规划一天以内的行程。** CityCity 目前更适合几小时、半日或一日内的 Citywalk、约会、亲子、美食、拍照和夜游路线。暂不建议咨询跨天、多城市或包含住宿衔接的旅行计划，因为当前 Agent 还没有酒店、跨城交通和多日状态优化能力。
+> **当前建议规划一天以内的行程。** CityCity Agent 目前更适合几小时、半日或一日内的 Citywalk、约会、亲子、美食、拍照和夜游路线。暂不建议咨询跨天、多城市或包含住宿衔接的旅行计划，因为当前 Agent 还没有酒店、跨城交通和多日状态优化能力。
 
 线上版本聚焦上海。对于高德覆盖的城市，可以修改默认城市、坐标和 API Key；对于海外城市，需要实现 Google Maps、Mapbox 等地图 Provider Adapter，而 Planner/Execute 编排可以继续复用。
 
@@ -48,12 +50,15 @@ CityCity 是一个面向**城市玩法规划**的 Agent 实验项目：它从自
 
 **[体验「上海 City 不 City」→](https://shanghaicitycity-web.havenai.online/)**
 
-<video src="https://github.com/lianyixin/citycity/releases/download/product-demo/product-demo.mp4" controls width="100%" poster="docs/assets/demo-video-placeholder.svg">
-  你的浏览器不支持视频播放，请直接
-  <a href="https://github.com/lianyixin/citycity/releases/download/product-demo/product-demo.mp4">下载产品演示视频</a>。
-</video>
+https://github.com/user-attachments/assets/20725cb5-ca2a-4abc-a05a-ac0446129e43
 
-> 上面是产品演示视频（托管在 [GitHub Release](https://github.com/lianyixin/citycity/releases/tag/product-demo)，不进 git）。本地预览可运行 `docs/assets/fetch-media.sh`。也可以直接打开[线上网站](https://shanghaicitycity-web.havenai.online/)体验。
+**[▶ 下载高清产品演示视频](https://github.com/lianyixin/citycity-agent/releases/download/product-demo/product-demo.mp4)** · [查看 Release](https://github.com/lianyixin/citycity-agent/releases/tag/product-demo)
+
+> 视频以 GitHub Release 资源托管，不进入 git 历史。本地预览可运行 `docs/assets/fetch-media.sh`。也可以直接打开[线上网站](https://shanghaicitycity-web.havenai.online/)体验。
+
+## 真实内容验证
+
+本项目生成的城市玩法攻略已持续发布到小红书账号[「上海 City 不 City」](https://www.xiaohongshu.com/user/profile/62aa83ef000000001b02b574)，目前账号已获得 **400 位粉丝**。真实发布反馈也在帮助项目持续改进路线质量、选题方向与内容表达。
 
 ## 项目包含什么
 
@@ -82,40 +87,36 @@ CityCity 是一个面向**城市玩法规划**的 Agent 实验项目：它从自
 
 ```mermaid
 flowchart LR
-    U[用户需求] --> W[React + Vite]
-    W --> API[FastAPI API]
-    API --> G[Generation Service]
-    G --> P[Planner Agent]
-    P --> B[路线分支队列]
+    U["用户需求"] --> FE["React / Vite"]
+    FE --> API["FastAPI"]
+    API --> G["生成服务"]
+    G --> P["Planner Agent"]
+    P --> Q["路线计划"]
 
-    B --> E1[Execute 分支 1]
-    B --> E2[Execute 分支 2]
-    B --> EN[Execute 分支 N]
-
-    subgraph 并行路线执行
-      E1
-      E2
-      EN
+    subgraph EXEC["有界并行执行"]
+        direction TB
+        E1["Execute Agent A"]
+        E2["Execute Agent B"]
+        EN["Execute Agent N"]
     end
 
-    E1 --> M[地图 / POI Adapter]
+    Q --> E1
+    Q --> E2
+    Q --> EN
+
+    E1 --> M["地图 / POI Adapter"]
     E2 --> M
     EN --> M
-    E1 --> L[LLM POI 筛选]
+    E1 --> L["LLM POI 筛选"]
     E2 --> L
     EN --> L
 
-    M --> C[(POI 缓存)]
-    E1 --> R[递归 Planner]
-    E2 --> R
-    EN --> R
-    R --> B
-
-    E1 --> A[路线聚合器]
+    M --> C[("POI 缓存")]
+    E1 --> A["路线聚合器"]
     E2 --> A
     EN --> A
-    A --> X[内容生成器]
-    X --> DB[(SQLite / PostgreSQL)]
+    A --> X["内容生成器"]
+    X --> DB[("SQLite / PostgreSQL")]
     DB --> API
 ```
 
@@ -131,7 +132,7 @@ sequenceDiagram
     participant LLM
 
     User->>Planner: 需求 + 位置 + 时间 + 偏好
-    Planner-->>Orchestrator: 3–N 个差异化计划
+    Planner-->>Orchestrator: 3 到 N 个差异化计划
     Orchestrator->>ExecuteAgents: 有界并发分发
     par 路线 A
       ExecuteAgents->>Map: 搜索 POI
@@ -166,8 +167,8 @@ sequenceDiagram
 需要 Python 3.11+、Node.js 20+、高德 Web Service Key 和 DeepSeek API Key。
 
 ```bash
-git clone https://github.com/lianyixin/citycity.git
-cd citycity
+git clone https://github.com/lianyixin/citycity-agent.git
+cd citycity-agent
 cp .env.example .env.development
 ```
 
@@ -251,8 +252,8 @@ cd frontend && npm run build
 
 ```bash
 cd frontend && npm ci && npm run build && cd ..
-docker build -t citycity .
-docker run --rm -p 8001:8000 --env-file .env.production citycity
+docker build -t citycity-agent .
+docker run --rm -p 8001:8000 --env-file .env.production citycity-agent
 ```
 
 `.env.production` 应由部署平台注入，不能提交到 Git。
@@ -261,7 +262,7 @@ docker run --rm -p 8001:8000 --env-file .env.production citycity
 
 ## 当前不足
 
-CityCity 目前是可运行的 Agent 应用与工程参考，但距离稳定、可信的通用城市规划器仍有明显差距：
+CityCity Agent 目前是可运行的 Agent 应用与工程参考，但距离稳定、可信的通用城市规划器仍有明显差距：
 
 ### Agent 与编排
 

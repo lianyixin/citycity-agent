@@ -1,6 +1,6 @@
-# Contributing to CityCity
+# Contributing to CityCity Agent
 
-Thanks for helping improve CityCity.
+Thanks for helping improve CityCity Agent.
 
 ## Development workflow
 
