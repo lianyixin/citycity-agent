@@ -265,7 +265,7 @@ docker run --rm -p 8001:8000 --env-file .env.production citycity-agent
 
 `.env.production` 应由部署平台注入，不能提交到 Git。
 
-开源版本**不包含任何每天自动发内容的定时调度器**；只有用户或 API 明确发起请求时才生成内容。
+本项目**不包含**每天自动发内容的定时调度器；只有用户或 API 明确发起请求时才会生成内容。
 
 ## ⚠️ 当前不足
 

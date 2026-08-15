@@ -103,8 +103,7 @@ export type LocationSuggestion = {
   amap_id?: string | null;
 };
 
-// API base is injected by the Haven runner at preview build time so /api
-// requests reach the reverse-proxied backend. Defaults to same-origin.
+// Optional API base for reverse-proxied deployments. Defaults to same-origin.
 const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 const USER_KEY = 'citycity_user_id';
 

@@ -1,7 +1,7 @@
 # Dependencies
 frontend/node_modules/
 
-# Build output (runner rebuilds)
+# Build output
 frontend/dist/
 
 # Local secret overrides — never commit
@@ -10,7 +10,7 @@ backend/.env
 .env.*
 !.env.example
 
-# Local deployment bindings may contain resource identifiers or secrets
+# Local deployment metadata
 .easylaunch/
 
 # Local databases

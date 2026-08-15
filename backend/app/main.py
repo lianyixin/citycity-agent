@@ -512,9 +512,8 @@ def create_app(db_engine: Engine = default_engine) -> FastAPI:
         return Response(content="success", media_type="text/plain")
 
     # ---- Static frontend serving (production single-container) ----
-    # Serve the built React app from frontend/dist. In preview, the Haven
-    # sandbox handles this separately; this block is for production deploys
-    # where the backend container is the only server.
+    # Serve the built React app from frontend/dist when the backend container
+    # is the only HTTP server. Separate frontend hosts can ignore this block.
     _FRONTEND_DIST = Path(os.environ.get("FRONTEND_DIST", "/app/frontend/dist"))
     if _FRONTEND_DIST.is_dir():
         index_html = _FRONTEND_DIST / "index.html"

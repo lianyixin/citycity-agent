@@ -16,7 +16,7 @@
 frontend/node_modules
 # Note: frontend/dist is NOT ignored - it's built locally and shipped in the Docker image
 
-# Local deployment bindings
+# Local deployment metadata
 .easylaunch/
 
 # Local SQLite DBs

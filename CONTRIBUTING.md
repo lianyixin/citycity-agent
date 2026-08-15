@@ -22,7 +22,7 @@ cd frontend && npm run build
 - Keep each pull request focused and reviewable.
 - Preserve bounded concurrency; do not add unbounded provider calls.
 - Do not silently replace grounded POIs with invented locations.
-- Never add API keys, private keys, tokens, database credentials, user data, or production deployment bindings.
+- Never add API keys, private keys, tokens, database credentials, user data, or production deployment config.
 - Document new environment variables in `.env.example` and both READMEs.
 - Clearly label provider-specific behavior.
 

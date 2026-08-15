@@ -135,9 +135,8 @@ def create_subscription_checkout(
 ) -> dict[str, Any]:
     """Build an alipay.trade.page.pay checkout URL.
 
-    The shared EasyLaunch merchant account is contracted for PagePay, not
-    Face-to-Face precreate. Keep the original browser open so it can poll the
-    subscription status while the user completes payment in a new tab.
+    Uses Alipay PagePay so the original browser can keep polling subscription
+    status while the user completes payment in a new tab.
     """
     config = _load_alipay_config()
     out_trade_no = f"SUB{int(time.time() * 1000)}{uuid.uuid4().hex[:8]}"
@@ -155,7 +154,6 @@ def create_subscription_checkout(
     params = _build_common_params(config, "alipay.trade.page.pay")
     if config.get("notify_url"):
         # notify_url is an Alipay common parameter, not part of biz_content.
-        # It remains project-specific while the shared merchant collects funds.
         params["notify_url"] = config["notify_url"]
     params["biz_content"] = json.dumps(
         biz_content,

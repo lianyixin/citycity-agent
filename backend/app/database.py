@@ -37,9 +37,9 @@ _load_env_files()
 def create_engine_from_env() -> Engine:
     """Create a SQLAlchemy engine from DATABASE_URL.
 
-    Reads `DATABASE_URL` from the environment. When set (EasyLaunch PostgreSQL
-    provisioned), connects to PostgreSQL. When unset (local dev without provisioning),
-    falls back to a local SQLite file so the project remains runnable offline.
+    Reads `DATABASE_URL` from the environment. When set, connects to that
+    database (typically PostgreSQL). When unset, falls back to a local SQLite
+    file so the project remains runnable offline.
     """
     database_url = os.environ.get("DATABASE_URL", "").strip()
     if database_url:
@@ -50,8 +50,8 @@ def create_engine_from_env() -> Engine:
                 future=True,
             )
         # SQLAlchemy 2.0 removed the `postgres://` dialect alias — must be
-        # `postgresql://` (or `postgresql+psycopg2://`). EasyLaunch DSNs use
-        # `postgres://`, so normalize before handing to create_engine.
+        # `postgresql://` (or `postgresql+psycopg2://`). Normalize common
+        # hosted DSNs before handing them to create_engine.
         if database_url.startswith("postgres://"):
             database_url = "postgresql://" + database_url[len("postgres://"):]
         return create_engine(database_url, future=True, pool_pre_ping=True)
