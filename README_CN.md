@@ -20,18 +20,19 @@
 
 CityCity Agent 把“上海长宁今晚有什么好玩的”这类开放问题，转换成**多条有真实地点支撑的玩法路线**。Planner Agent 先生成多样化分支，多个 Execute Agent 再以受控并发的方式搜索 POI、筛选地点并递归扩展路线。
 
-## 🚀 核心卖点
-
-| | 常见 Travel Agent | **CityCity Agent** |
-| --- | --- | --- |
-| **规划方式** | 往往一次只输出 **1** 条行程 | **并行探索 N 条玩法路线**，让用户自己选 |
-| **产品定位** | 偏多日旅行：酒店、机票、跨城交通 | 专注 **Citywalk / 城市玩法规划**：几小时到一天内怎么玩 |
-| **落地方式** | 容易停留在泛化建议 | 每条分支都用真实地图 POI 验证后再成稿 |
+## 🚀 为什么不一样
 
 > [!IMPORTANT]
-> **1. 先做并行多路径规划。** 常见 Travel Agent 容易过早押注单一方案；CityCity Agent 用多个 Execute Agent 并发探索，一次请求就能返回多种不同玩法。
->
-> **2. 先做城市玩法规划。** 这不是泛化的多日 Travel Agent，而是专门回答 Citywalk、约会、亲子、美食、拍照、夜游这类“现在周边可以怎么玩”的问题。
+> ### 一次提问，多种有真实地点支撑的玩法。
+> - ⚡ **先探索，再选择。** Planner 先展开差异化方向，多个 Execute Agent 再受控并发，一次生成多条候选玩法路线。
+> - 🏙️ **为城市日常而设计，不做泛化旅行物流。** 聚焦几小时到一天内的 Citywalk、约会、亲子、美食、拍照和夜游，而不是酒店、机票与跨城多日衔接。
+> - 📍 **真实地点落地，还能继续扩展。** 每个分支都会搜索地图 POI、筛选合适地点，并递归规划下一站，不停留在泛化建议。
+
+| | 常见的单路线生成流程 | **CityCity Agent** |
+| --- | --- | --- |
+| **输出结果** | 给出一套方案，不合适就重新生成 | 一次生成多条差异化路线，直接比较选择 |
+| **规划范围** | 宽泛的旅行行程生成 | 几小时到一天内的城市玩法规划 |
+| **执行方式** | 单链路生成 | Planner → 并行 Execute Agents → POI 验证 → 路线聚合 |
 
 ## 🎬 在线演示
 
@@ -41,7 +42,8 @@ https://github.com/user-attachments/assets/692651f0-d87b-4a2e-b287-cab1bd7e0bad
 
 **[▶ 下载高清产品演示视频](https://github.com/lianyixin/citycity-agent/releases/download/product-demo/product-demo.mp4)** · [查看 Release](https://github.com/lianyixin/citycity-agent/releases/tag/product-demo)
 
-本项目生成的玩法攻略也在持续发布到小红书账号[「上海 City 不 City」](https://www.xiaohongshu.com/user/profile/62aa83ef000000001b02b574)（**400 位粉丝**）。
+> [!TIP]
+> **已经用于真实内容发布。** 本项目生成的玩法攻略也在持续发布到小红书账号[「上海 City 不 City」](https://www.xiaohongshu.com/user/profile/62aa83ef000000001b02b574)，目前账号有 **400 位粉丝**。
 
 ## 🎯 项目背景
 
@@ -86,7 +88,7 @@ CityCity Agent 从自然语言中理解地点、时间、同行人、预算与�
 - 可选的 Logto 登录、Umami 分析、支付宝订阅与即梦图片润色
 - Docker 部署、示例数据、中英文文档和完整后端测试
 
-## 🧠 核心特点
+## 🧠 工程实现亮点
 
 - **并行多路线探索**：多个路线分支并发执行，而不是串行生成一条路线。
 - **Planner / Execute 分离**：LLM 负责规划意图，工具调用负责用真实 POI 落地。
