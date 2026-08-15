@@ -14,11 +14,27 @@
 
 <p align="center">
   <a href="https://shanghaicitycity-web.havenai.online/"><img src="https://img.shields.io/badge/在线演示-online-2ea44f" alt="在线演示" /></a>
-  <a href="https://www.xiaohongshu.com/user/profile/62aa83ef000000001b02b574"><img src="https://img.shields.io/badge/小红书-400_位粉丝-ff2442" alt="小红书 400 位粉丝" /></a>
+  <a href="https://shanghaicitycity-web.havenai.online/"><img src="https://img.shields.io/badge/MAU-~1.3k-1b75d0" alt="约 1.3k 月活跃访客" /></a>
+  <a href="https://www.xiaohongshu.com/user/profile/62aa83ef000000001b02b574"><img src="https://img.shields.io/badge/小红书-400+_粉丝-ff2442" alt="小红书 400+ 粉丝" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License" /></a>
 </p>
 
-CityCity Agent 把“上海长宁今晚有什么好玩的”这类开放问题，转换成**多条有真实地点支撑的玩法路线**。Planner Agent 先生成多样化分支，多个 Execute Agent 再以受控并发的方式搜索 POI、筛选地点并递归扩展路线。
+**[上海 City 不 City](https://shanghaicitycity-web.havenai.online/)** 是一个 **AI 驱动的上海城市漫步路线发现平台**。本仓库是支撑它的开源 Agent：用户提出“上海长宁今晚有什么好玩的”，CityCity Agent 会返回**多条有真实地点支撑的玩法路线**。Planner Agent 先生成多样化分支，多个 Execute Agent 再以受控并发的方式搜索 POI、筛选地点并递归扩展路线。
+
+## 📊 当前成绩
+
+截至 **2026 年 8 月 15 日**，线上产品已经有真实用户和真实内容：
+
+| 指标 | 快照 |
+| --- | --- |
+| **月活跃访客** | **约 1.3k MAU**（近 30 天 1.28k 独立访客） |
+| **内容验证** | 小红书账号[「上海 City 不 City」](https://www.xiaohongshu.com/user/profile/62aa83ef000000001b02b574) 已有 **400+ 粉丝**，持续发布 AI 生成的城市玩法笔记 |
+
+<p align="center">
+  <img src="docs/assets/umami-last-30-days-2026-08-15.png" width="100%" alt="上海 City 不 City 的 Umami 统计：截至 2026-08-15，近 30 天约 1.28k 访客" />
+</p>
+
+<p align="center"><sub>线上站点 Umami 快照，统计区间为近 30 天，截取于 2026 年 8 月 15 日前。</sub></p>
 
 ## 🚀 为什么不一样
 
@@ -41,9 +57,6 @@ CityCity Agent 把“上海长宁今晚有什么好玩的”这类开放问题�
 https://github.com/user-attachments/assets/692651f0-d87b-4a2e-b287-cab1bd7e0bad
 
 **[▶ 下载高清产品演示视频](https://github.com/lianyixin/citycity-agent/releases/download/product-demo/product-demo.mp4)** · [查看 Release](https://github.com/lianyixin/citycity-agent/releases/tag/product-demo)
-
-> [!TIP]
-> **已经用于真实内容发布。** 本项目生成的玩法攻略也在持续发布到小红书账号[「上海 City 不 City」](https://www.xiaohongshu.com/user/profile/62aa83ef000000001b02b574)，目前账号有 **400 位粉丝**。
 
 ## 🎯 项目背景
 
