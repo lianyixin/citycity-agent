@@ -120,7 +120,9 @@ CityCity Agent 从自然语言中理解地点、时间、同行人、预算与�
 驱动线上产品的 Planner / Execute 工作流已封装为独立的
 [Agent Skill](skills/citycity-play-planner/SKILL.md)。安装后，你的 Coding Agent 就能直接回答城市玩法问题：
 先理解意图，再展开多个差异化玩法方向，并行调用真实高德 POI 数据验证每一站，
-把有潜力的分支扩展成多地点路线，最后给出多条可直接比较的玩法路线。
+把有潜力的分支扩展成多地点路线，最后给出多条可直接比较的玩法路线，
+并针对这次玩法亲手写一份可打开、可分享的 HTML 页面（含原始提问、地点图片和站间距离）。
+页面样式由 Agent 按玩法气质自行设计：夜游和亲子路线不会长成同一个样子。
 
 该 Skill 遵循开放的 `SKILL.md` 格式，可用于 Cursor、Claude Code、Codex 等兼容 Agent。
 它不依赖 CityCity 后端或 DeepSeek；地点验证通过内置脚本调用高德 Web Service API，
@@ -180,9 +182,10 @@ export DEFAULT_CITY_LNG=121.4737
 
 Skill 包含：
 
-- [`SKILL.md`](skills/citycity-play-planner/SKILL.md)：触发元数据与七步规划流程
+- [`SKILL.md`](skills/citycity-play-planner/SKILL.md)：触发元数据与八步规划流程
 - [`scripts/amap_poi.py`](skills/citycity-play-planner/scripts/amap_poi.py)：高德 POI 搜索与地理编码，仅依赖标准库
 - [`references/route-quality.md`](skills/citycity-play-planner/references/route-quality.md)：选点、过滤、去重与多样性规则
+- [`references/html-page.md`](skills/citycity-play-planner/references/html-page.md)：HTML 页面必须包含什么，以及哪些部分由 Agent 自由设计
 - [`references/worked-example.md`](skills/citycity-play-planner/references/worked-example.md)：从需求到最终路线的完整示例
 
 ## 🏗️ 技术架构

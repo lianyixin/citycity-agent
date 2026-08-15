@@ -128,7 +128,9 @@ def normalize_poi(item, center):
         "tel": str(item.get("tel") or ""),
         "lat": lat,
         "lng": lng,
-        "photos": photo_urls[:3],
+        "photos": photo_urls[:6],
+        "opentime": str(biz_ext.get("opentime") or item.get("business") or "") or None,
+        "tag": str(item.get("tag") or ""),
         "distance_meters": None,
     }
     if center and lat and lng:

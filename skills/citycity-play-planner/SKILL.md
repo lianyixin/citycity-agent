@@ -1,6 +1,6 @@
 ---
 name: citycity-play-planner
-description: Plans several grounded city activity routes for a few hours to one day, using a Planner that fans out diverse ideas and parallel Execute branches that verify each stop against real Amap POI data. Use when the user asks what to do in a city, where to go tonight or this weekend, or wants a citywalk, date, family outing, food trip, photo route, or nightlife plan (e.g. "上海长宁今晚有什么好玩的", "周末下午想散步喝咖啡", "带孩子去哪玩"). Not for multi-day itineraries, hotels, or long-distance transport.
+description: Plans several grounded city activity routes for a few hours to one day, using a Planner that fans out diverse ideas and parallel Execute branches that verify each stop against real Amap POI data, then hand-writes a shareable HTML page designed around that specific plan. Use when the user asks what to do in a city, where to go tonight or this weekend, or wants a citywalk, date, family outing, food trip, photo route, or nightlife plan (e.g. "上海长宁今晚有什么好玩的", "周末下午想散步喝咖啡", "带孩子去哪玩"). Not for multi-day itineraries, hotels, or long-distance transport.
 license: MIT
 compatibility: Requires python3 and network access. POI grounding uses the Amap Web Service API, so an AMAP_API_KEY environment variable is required and coverage is limited to mainland China.
 metadata:
@@ -52,7 +52,8 @@ Suggest these to the user the first time a request has no usable location.
 4. Execute: search and select a real POI per branch, in parallel
 5. Expand: add the next stop to promising branches
 6. Filter: drop weak routes, deduplicate, keep variety
-7. Present: several routes the user can compare
+7. Present: several routes the user can compare in chat
+8. Design: hand-write an HTML page that matches this plan
 ```
 
 ### Step 1: Extract intent
@@ -195,6 +196,26 @@ Rules for the final answer:
 - Say which routes are weaker and why, instead of silently padding the list.
 - If a branch failed, briefly say what could not be covered.
 
+### Step 8: Write the HTML page
+
+After the chat summary, design and hand-write a single self-contained HTML file for this plan.
+
+There is no template. Read your own routes first, then choose a layout and visual language that
+suits them: a late-night bar route and a rainy-day family plan should not look alike. Write the
+HTML and CSS yourself, the way you would design that specific outing.
+
+Read [references/html-page.md](references/html-page.md) for what the page must contain and where
+you have freedom. The rules that never bend:
+
+- Only places, photos, ratings, and prices returned by this session's searches.
+- Distances between stops computed from real coordinates, labelled as straight-line estimates.
+- Include the user's original question and the intent you planned against.
+- One file, inline CSS, readable on a phone.
+
+Name the file after the area and time context, then tell the user where you saved it.
+
+Skip the page only when every branch failed and there are no routes to show.
+
 ## Constraints
 
 | Setting | Default |
@@ -225,10 +246,14 @@ Rules for the final answer:
 - Sending a 附近 request to a famous cross-district landmark.
 - Assuming the user's city, or treating city-wide results as if they were nearby.
 - Presenting LLM-written opening hours, prices, or transport times as verified facts.
+- Reusing one HTML layout for every plan, or filling the page with photos and ratings that no
+  search returned.
 
 ## Reference
 
 - [references/route-quality.md](references/route-quality.md) — POI selection, filtering,
   deduplication, and diversity rules.
+- [references/html-page.md](references/html-page.md) — what the HTML page must contain, and
+  where you are free to design.
 - [references/worked-example.md](references/worked-example.md) — a full run from request to
   final routes.

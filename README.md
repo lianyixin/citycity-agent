@@ -121,7 +121,9 @@ The same Planner / Execute workflow that powers the live product is packaged as 
 [Agent Skill](skills/citycity-play-planner/SKILL.md). Once installed, your coding agent can answer
 city activity questions directly: it extracts intent, fans out several distinct play directions,
 verifies each stop against live Amap POI data in parallel, expands promising branches into
-multi-stop routes, and returns several routes you can compare.
+multi-stop routes, and returns several routes you can compare. It then hand-writes a shareable
+HTML page designed around that particular plan, carrying your original question, POI photos,
+and the distance between each stop.
 
 It follows the open `SKILL.md` format and works in Cursor, Claude Code, Codex, and other
 compatible agents. It does not need CityCity's backend or DeepSeek; POI grounding calls the Amap
@@ -184,9 +186,10 @@ Use citycity-play-planner to plan a relaxed Saturday afternoon walk starting fro
 
 The skill contains:
 
-- [`SKILL.md`](skills/citycity-play-planner/SKILL.md) — trigger metadata and the seven-step planning workflow
+- [`SKILL.md`](skills/citycity-play-planner/SKILL.md) — trigger metadata and the eight-step planning workflow
 - [`scripts/amap_poi.py`](skills/citycity-play-planner/scripts/amap_poi.py) — Amap POI search and geocoding, standard library only
 - [`references/route-quality.md`](skills/citycity-play-planner/references/route-quality.md) — POI selection, filtering, deduplication, and diversity rules
+- [`references/html-page.md`](skills/citycity-play-planner/references/html-page.md) — what the HTML page must contain, and where the agent designs freely
 - [`references/worked-example.md`](skills/citycity-play-planner/references/worked-example.md) — a full run from request to final routes
 
 ## 🏗️ Architecture
