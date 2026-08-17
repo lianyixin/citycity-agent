@@ -84,18 +84,29 @@ The park branch gains a nearby dessert stop. Routes reach two to three stops eac
 
 三条路线单程都在 1.5 公里内。营业时间和当天是否需要排队建议出发前再确认一下。
 逛街方向这次没找到合适的地点：附近以大型商场为主，和你想要的"不累的散步"不太匹配。
+
+完整版（含照片、地图链接、站间距离）：静安寺周六下午玩法.html
 ```
+
+Text only. The POI photos are not embedded here — they belong on the page, and the chat reply
+just links to it.
 
 ## 8. HTML page
 
-This plan is a slow, photo-friendly afternoon, so the page is designed to match: soft warm
-background, large POI photos, generous whitespace, a vertical timeline with walking distance
-between stops. A nightlife plan for the same area would get a dark, neon-accented treatment
-instead, and a two-stop date would read better as a side-by-side comparison.
+First check for a design skill in the environment; if one is available, it drives the visual
+layer. Otherwise design it yourself against
+[references/html-page.md](html-page.md).
+
+This plan is a slow, photo-friendly afternoon, so the page is designed to match: the warm
+CityCity light palette, a serif display heading over a sans body, POI photos all cropped to 4:3
+inside an 820px content column, and a vertical timeline carrying the walking distance between
+stops. A nightlife plan for the same area would get a dark, neon-accented treatment instead — with
+the same contrast discipline — and a two-stop date would read better as a side-by-side comparison.
 
 Written by hand into `静安寺周六下午玩法.html`: one file, inline CSS, the user's original
 question at the top, the three routes with real POI photos and coordinates, straight-line
-distance between stops, the failed 逛街 direction, and a note that opening hours were not
+distance between stops, the failed 逛街 direction, and a quiet note that opening hours were not
 verified.
 
-The chat reply still lists the three routes and points to the saved file.
+Then walk the self-review checklist — content column, type scale, contrast, photo crops, 375px
+width — and fix what fails before handing the file over.

@@ -52,8 +52,8 @@ Suggest these to the user the first time a request has no usable location.
 4. Execute: search and select a real POI per branch, in parallel
 5. Expand: add the next stop to promising branches
 6. Filter: drop weak routes, deduplicate, keep variety
-7. Present: several routes the user can compare in chat
-8. Design: hand-write an HTML page that matches this plan
+7. Present: a text-only chat summary of the routes, plus a link to the page
+8. Design: hand-write an HTML page that matches this plan, to a real craft bar
 ```
 
 ### Step 1: Extract intent
@@ -174,7 +174,11 @@ several routes that visit the same first stop.
 
 ### Step 7: Present the routes
 
-Reply in the user's language. Lead with a one-line read of their request, then the routes:
+The chat reply is a scannable text summary. It is not the deliverable — the HTML page from Step 8
+is. Keep the chat short enough to read on a phone without scrolling for a minute.
+
+Reply in the user's language. Lead with a one-line read of their request, then the routes, then a
+single line pointing at the saved page:
 
 ```markdown
 今晚长宁，给你三条不同风格的路线：
@@ -185,32 +189,55 @@ Reply in the user's language. Lead with a one-line read of their request, then t
 - 路线说明：两站相距约 900 米，步行 12 分钟
 
 **2. ...**
+
+营业时间和是否需要排队没有核实，出发前确认一下。
+完整版（含照片、地图链接、站间距离）：<相对路径>.html
 ```
 
 Rules for the final answer:
 
+- **Text only. Never embed images in the chat reply.** No `![](...)`, no POI photo URLs, no
+  base64 images, no map screenshots. Photos live on the HTML page. The chat reply links to that
+  file and nothing more.
+- Do not paste the HTML source, a code block of the page, or a long list of raw photo URLs into
+  the chat either. One link to the file is the whole handoff.
 - Only mention places returned by the search. Never invent a venue, address, or rating.
 - Report ratings, per-person cost, and distance only when the search returned them.
 - Do not state opening hours or prices that the data did not provide. Say they should be checked
   before going.
 - Say which routes are weaker and why, instead of silently padding the list.
 - If a branch failed, briefly say what could not be covered.
+- Cap it at roughly 3 bullet lines per route. Detail that does not fit belongs on the page.
 
-### Step 8: Write the HTML page
+### Step 8: Design and write the HTML page
 
-After the chat summary, design and hand-write a single self-contained HTML file for this plan.
+This page is the deliverable. Treat it as design work with a real quality bar, not as a dump of
+the search results into `<div>`s.
+
+**First, look for a design skill.** Before writing any HTML, check whether the environment offers
+a skill about web design, visual design, frontend aesthetics, or artifact/page building. If one
+exists, invoke it and let it own the visual layer: typography, colour, spacing, and layout. This
+skill owns the data and the content rules; it does not need to own the aesthetics. If no such
+skill is available, you are the designer, and
+[references/html-page.md](references/html-page.md) is the standard you are held to.
 
 There is no template. Read your own routes first, then choose a layout and visual language that
-suits them: a late-night bar route and a rainy-day family plan should not look alike. Write the
-HTML and CSS yourself, the way you would design that specific outing.
+suits them: a late-night bar route and a rainy-day family plan should not look alike.
 
-Read [references/html-page.md](references/html-page.md) for what the page must contain and where
-you have freedom. The rules that never bend:
+Read [references/html-page.md](references/html-page.md) in full before writing. The rules that
+never bend:
 
 - Only places, photos, ratings, and prices returned by this session's searches.
 - Distances between stops computed from real coordinates, labelled as straight-line estimates.
 - Include the user's original question and the intent you planned against.
 - One file, inline CSS, readable on a phone.
+- Meets the craft bar in `references/html-page.md`: a constrained content column, a real type
+  scale, one accent colour, text that passes 4.5:1 contrast, photos cropped to a consistent
+  aspect ratio, and spacing from a single scale.
+
+Then run the self-review checklist at the end of `references/html-page.md` and fix what fails
+before you hand the file over. A page that looks unconsidered is a failed step, even when every
+fact on it is correct.
 
 Name the file after the area and time context, then tell the user where you saved it.
 
@@ -246,8 +273,12 @@ Skip the page only when every branch failed and there are no routes to show.
 - Sending a 附近 request to a famous cross-district landmark.
 - Assuming the user's city, or treating city-wide results as if they were nearby.
 - Presenting LLM-written opening hours, prices, or transport times as verified facts.
+- Embedding POI photos, image markdown, or the page's HTML source in the chat reply instead of
+  linking to the file.
 - Reusing one HTML layout for every plan, or filling the page with photos and ratings that no
   search returned.
+- Shipping a page with full-bleed uncropped photos, edge-to-edge text, a single flat list of
+  equally-weighted cards, or low-contrast text — correct data does not excuse an ugly page.
 
 ## Reference
 
